@@ -358,6 +358,22 @@
       cursor: pointer;
     }
 
+    .evidence-site {
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .evidence-site .node {
+      transition: fill 180ms ease, stroke 180ms ease, filter 180ms ease;
+    }
+
+    .evidence-site.active .node,
+    .evidence-site:hover .node {
+      fill: rgba(212, 175, 55, 0.3);
+      stroke: var(--gold);
+      filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.34));
+    }
+
     .draw-line {
       stroke-dasharray: 1800;
       stroke-dashoffset: 1800;
@@ -403,6 +419,7 @@
     body.ready .site-group:nth-of-type(3) { transition-delay: 1380ms; }
     body.ready .site-group:nth-of-type(4) { transition-delay: 1480ms; }
     body.ready .site-group:nth-of-type(5) { transition-delay: 1580ms; }
+    body.ready .site-group:nth-of-type(6) { transition-delay: 1680ms; }
 
     .site-core {
       fill: var(--surface);
@@ -543,6 +560,21 @@
       font-size: 13px;
       line-height: 1.6;
       color: var(--muted);
+    }
+
+    .archive-meta {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.035);
+      padding: 9px 10px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .archive-meta b {
+      color: var(--text);
+      font-weight: 400;
     }
 
     @keyframes drawer-reveal {
@@ -949,7 +981,7 @@
                     <circle cx="286" cy="220" r="15" fill="none" stroke="rgba(212,175,55,0.5)" stroke-dasharray="5 4" />
                   </g>
                   <g class="route-layer">
-                    <path class="draw-line" d="M444 512 C444 470 444 430 444 410 C444 380 444 358 444 346 C444 318 444 294 444 278 C416 252 356 232 286 220 C370 192 426 158 444 112" fill="none" stroke="var(--gold)" stroke-width="2" />
+                    <path id="heritageRoutePath" class="draw-line" d="M444 512 C444 470 444 430 444 410 C444 380 444 358 444 346 C444 318 444 294 444 278 C416 252 356 232 286 220 C370 192 426 158 444 112" fill="none" stroke="var(--gold)" stroke-width="2" />
                   </g>
                   <g class="analysis-layer">
                     <path d="M160 112 H730 V510 H160 Z" fill="rgba(212,175,55,0.06)" stroke="rgba(212,175,55,0.36)" />
@@ -986,10 +1018,16 @@
                     <line class="leader-line" x1="-10" y1="-10" x2="-78" y2="-36" stroke="var(--gold)" />
                     <text class="site-label map-label zh" x="-134" y="-38">九洲池</text>
                   </g>
+                  <g class="site-group interactive" data-site="玄武门" data-key="xuanwu" transform="translate(444 112)">
+                    <circle class="site-pulse" r="10" />
+                    <circle class="site-core" r="7" />
+                    <line class="leader-line" x1="12" y1="-8" x2="82" y2="-34" stroke="var(--gold)" />
+                    <text class="site-label map-label zh" x="88" y="-36">玄武门</text>
+                  </g>
                 </svg>
                 <div class="map-caption">
-                  <span>叠城 / 来源：团队 GIS 制图</span>
-                  <span>现代洛阳底图 + 隋唐宫城核心范围</span>
+                  <span>叠城 / 真实坐标投影 + 团队 GIS 制图</span>
+                  <span>WGS84 经纬度锚点，可替换为后续 GIS 校准数据</span>
                 </div>
               </div>
             </div>
@@ -1043,19 +1081,33 @@
                   <path class="cyan-line" d="M410 402 H484 V452 H410 Z"/>
                   <path class="cyan-line" d="M414 324 H478 V370 H414 Z"/>
                   <path class="cyan-line dash" d="M206 220 C250 172 328 178 362 228 C316 258 246 258 206 220"/>
-                  <circle class="node cyan" cx="444" cy="510" r="8"/>
-                  <circle class="node cyan" cx="444" cy="426" r="7"/>
-                  <circle class="node cyan" cx="444" cy="346" r="7"/>
-                  <circle class="node gold" cx="286" cy="220" r="7"/>
-                  <circle class="node" cx="690" cy="462" r="7"/>
+                  <g class="evidence-site interactive" data-key="yingtian" transform="translate(444 510)">
+                    <circle class="node cyan" r="8"/>
+                    <text class="map-label zh" x="18" y="4">应天门 A</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="qianyuan" transform="translate(444 426)">
+                    <circle class="node cyan" r="7"/>
+                    <text class="map-label zh" x="18" y="4">乾元门 B</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="mingtang" transform="translate(444 346)">
+                    <circle class="node cyan" r="7"/>
+                    <text class="map-label zh" x="18" y="4">明堂 A</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="tiantang" transform="translate(444 278)">
+                    <circle class="node cyan" r="7"/>
+                    <text class="map-label zh" x="18" y="4">天堂 B</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="jiuzhou" transform="translate(286 220)">
+                    <circle class="node gold" r="7"/>
+                    <text class="map-label zh" x="-74" y="-14">九洲池 B</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="xuanwu" transform="translate(444 112)">
+                    <circle class="node" r="7"/>
+                    <text class="map-label zh" x="18" y="4">玄武门 B</text>
+                  </g>
                   <text class="map-label zh" x="166" y="106">考古确认：可直接入图</text>
                   <text class="map-label zh" x="658" y="158">报告依据：需要配准</text>
                   <text class="map-label zh" x="558" y="82">文献线索：辅助定位</text>
-                  <text class="map-label zh" x="462" y="514">应天门 A</text>
-                  <text class="map-label zh" x="462" y="430">乾元门 A</text>
-                  <text class="map-label zh" x="462" y="350">明堂 A</text>
-                  <text class="map-label zh" x="242" y="205">九洲池 B</text>
-                  <text class="map-label zh" x="650" y="482">嘉豫门 B/C</text>
                 </svg>
               </div>
             </div>
@@ -1070,16 +1122,17 @@
                 </div>
               </div>
               <div class="panel">
-                <div class="panel-header"><span>点位证据卡</span><span>应天门</span></div>
+                <div class="panel-header"><span>点位证据卡</span><span id="evidenceCardStatus">应天门</span></div>
                 <div class="panel-body">
                   <div class="node-card">
-                    <h3>应天门</h3>
-                    <p>门址、阙台与宫城南墙关系可由发掘资料确认，是中轴线南端最稳定的定位锚点。</p>
+                    <h3 id="evidenceCardTitle">应天门</h3>
+                    <p id="evidenceCardText">门址、阙台与宫城南墙关系可由发掘资料确认，是中轴线南端最稳定的定位锚点。</p>
                   </div>
-                  <div class="stat-row"><span>几何类型</span><span>点 / 面</span></div>
-                  <div class="stat-row"><span>证据等级</span><span>A</span></div>
-                  <div class="stat-row"><span>资料来源</span><span>第二册 / 发掘图件</span></div>
-                  <div class="stat-row"><span>追溯字段</span><span>页码 / 图号 / 探方号</span></div>
+                  <div class="stat-row"><span>几何类型</span><span id="evidenceGeometry">点 / 面</span></div>
+                  <div class="stat-row"><span>证据等级</span><span id="evidenceGrade">A</span></div>
+                  <div class="stat-row"><span>资料来源</span><span id="evidenceSource">第二册 / 发掘图件</span></div>
+                  <div class="stat-row"><span>坐标状态</span><span id="evidenceCoord">OSM + 待校准</span></div>
+                  <div class="stat-row"><span>现代锚点</span><span id="evidenceAnchor">应天门遗址</span></div>
                 </div>
               </div>
             </div>
@@ -1144,8 +1197,13 @@
     </div>
   </div>
 
+  <script src="assets/real-sites.js"></script>
   <script src="assets/model-preview.js"></script>
   <script>
+    const realSiteDataset = window.LUOYANG_REAL_SITES || null;
+    const realSites = realSiteDataset?.sites || [];
+    const realSiteByKey = Object.fromEntries(realSites.map((site) => [site.key, site]));
+
     const siteData = {
       yingtian: {
         name: "应天门",
@@ -1196,6 +1254,16 @@
           ["唐代复原", "宫苑、水体和岛屿共同组织游赏与宫廷事件。"],
           ["空间意义", "从礼制中轴转入宫苑水系和人物事件现场。"]
         ]
+      },
+      xuanwu: {
+        name: "玄武门",
+        preview: "宫城北端节点，人物事件路径的收束位置。",
+        layers: [
+          ["今日遗址", "对应玄武门大街以南的宫城北部叙事范围。"],
+          ["考古证据", "当前坐标为中轴推算锚点，需要补充报告页码和 GIS 控制点。"],
+          ["唐代复原", "作为宫城北部节点，进入神龙政变等政治事件叙事。"],
+          ["空间意义", "把南端入城礼仪轴线转化为宫廷权力更替的历史现场。"]
+        ]
       }
     };
 
@@ -1210,9 +1278,60 @@
     const archiveDrawer = document.querySelector("#archiveDrawer");
     const modeButtons = Array.from(document.querySelectorAll(".mode-strip button"));
     const siteGroups = Array.from(document.querySelectorAll(".site-group"));
+    const evidenceSites = Array.from(document.querySelectorAll(".evidence-site"));
+    const heritageRoutePath = document.querySelector("#heritageRoutePath");
+    const evidenceCardStatus = document.querySelector("#evidenceCardStatus");
+    const evidenceCardTitle = document.querySelector("#evidenceCardTitle");
+    const evidenceCardText = document.querySelector("#evidenceCardText");
+    const evidenceGeometry = document.querySelector("#evidenceGeometry");
+    const evidenceGrade = document.querySelector("#evidenceGrade");
+    const evidenceSource = document.querySelector("#evidenceSource");
+    const evidenceCoord = document.querySelector("#evidenceCoord");
+    const evidenceAnchor = document.querySelector("#evidenceAnchor");
     const modelCanvas = document.querySelector("#modelCanvas");
     const modelToggle = document.querySelector("#modelToggle");
     let modelRendered = false;
+
+    function projectLngLat(lng, lat) {
+      const bounds = realSiteDataset?.bounds;
+      const viewBox = realSiteDataset?.viewBox || { width: 900, height: 620 };
+      if (!bounds) return null;
+      const x = ((lng - bounds.west) / (bounds.east - bounds.west)) * viewBox.width;
+      const y = (1 - (lat - bounds.south) / (bounds.north - bounds.south)) * viewBox.height;
+      return {
+        x: Math.round(x * 10) / 10,
+        y: Math.round(y * 10) / 10
+      };
+    }
+
+    function sitePoint(key) {
+      const site = realSiteByKey[key];
+      if (!site) return null;
+      return projectLngLat(site.lng, site.lat);
+    }
+
+    function formatCoord(site) {
+      if (!site) return "待录入";
+      return `${site.lat.toFixed(6)}, ${site.lng.toFixed(6)}`;
+    }
+
+    function applyRealSitePositions() {
+      [...siteGroups, ...evidenceSites].forEach((group) => {
+        const point = sitePoint(group.dataset.key);
+        if (!point) return;
+        group.setAttribute("transform", `translate(${point.x} ${point.y})`);
+        group.dataset.lng = realSiteByKey[group.dataset.key].lng;
+        group.dataset.lat = realSiteByKey[group.dataset.key].lat;
+      });
+
+      const routeKeys = ["yingtian", "qianyuan", "mingtang", "tiantang", "jiuzhou", "xuanwu"];
+      const routePoints = routeKeys.map(sitePoint).filter(Boolean);
+      if (heritageRoutePath && routePoints.length >= 2) {
+        const [start, ...rest] = routePoints;
+        const d = [`M${start.x} ${start.y}`, ...rest.map((point) => `L${point.x} ${point.y}`)].join(" ");
+        heritageRoutePath.setAttribute("d", d);
+      }
+    }
 
     function setDrawLengths(scope = document) {
       scope.querySelectorAll(".draw-line").forEach((path) => {
@@ -1332,15 +1451,25 @@
     function previewSite(key) {
       const site = siteData[key];
       if (!site || !sitePreview) return;
-      sitePreview.textContent = `${site.name} / ${site.preview}`;
+      const real = realSiteByKey[key];
+      const suffix = real ? ` / ${formatCoord(real)}` : "";
+      sitePreview.textContent = `${site.name} / ${site.preview}${suffix}`;
     }
 
     function openArchive(key) {
       const site = siteData[key];
       if (!site || !archiveDrawer) return;
+      const real = realSiteByKey[key];
       overviewTitle.textContent = site.name;
       overviewText.textContent = site.preview;
-      archiveDrawer.innerHTML = site.layers.map(([title, body], index) => `
+      const meta = real ? `
+        <div class="archive-meta">
+          <div><b>现代坐标</b> ${formatCoord(real)}</div>
+          <div><b>坐标状态</b> ${real.coordinateStatus}</div>
+          <div><b>现代锚点</b> ${real.modernAnchor}</div>
+        </div>
+      ` : "";
+      archiveDrawer.innerHTML = meta + site.layers.map(([title, body], index) => `
         <div class="archive-row" style="animation-delay:${index * 120}ms">
           <h4>${title}</h4>
           <p>${body}</p>
@@ -1351,6 +1480,21 @@
       });
       siteGroups.forEach((group) => group.classList.toggle("active", group.dataset.key === key));
       atlasMap?.classList.add("site-focus");
+    }
+
+    function updateEvidenceCard(key) {
+      const site = siteData[key];
+      const real = realSiteByKey[key];
+      if (!site || !real) return;
+      evidenceCardStatus.textContent = real.name;
+      evidenceCardTitle.textContent = real.name;
+      evidenceCardText.textContent = real.evidenceNote || site.preview;
+      evidenceGeometry.textContent = real.geometry.replace("_", " / ");
+      evidenceGrade.textContent = real.evidenceGrade;
+      evidenceSource.textContent = real.evidenceSource;
+      evidenceCoord.textContent = `${real.coordinateStatus} / ${formatCoord(real)}`;
+      evidenceAnchor.textContent = real.modernAnchor;
+      evidenceSites.forEach((group) => group.classList.toggle("active", group.dataset.key === key));
     }
 
     buttons.forEach((button) => {
@@ -1376,12 +1520,20 @@
       group.addEventListener("click", () => openArchive(key));
     });
 
+    evidenceSites.forEach((group) => {
+      const key = group.dataset.key;
+      group.addEventListener("mouseenter", () => updateEvidenceCard(key));
+      group.addEventListener("click", () => updateEvidenceCard(key));
+    });
+
     revealSlider?.addEventListener("input", (event) => updateReveal(event.target.value));
     modelToggle?.addEventListener("click", toggleModel);
     window.addEventListener("resize", () => {
       if (atlasMap?.classList.contains("show-model")) renderModel();
     });
 
+    applyRealSitePositions();
+    updateEvidenceCard("yingtian");
     setDrawLengths(document);
     updateReveal(revealSlider?.value || 58);
     window.addEventListener("load", () => {
