@@ -6,6 +6,11 @@
   <title>隋唐洛阳宫城的古今叠合</title>
   <style>
     :root {
+      --reveal: 0.58;
+      --modern-opacity: 0.52;
+      --ancient-opacity: 0.82;
+      --bronze-opacity: 0.74;
+      --glow-opacity: 0.26;
       --bg: #050505;
       --surface: #0e0e0e;
       --surface-2: #141414;
@@ -46,6 +51,25 @@
         linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
       background-size: 32px 32px;
     }
+
+    .topbar,
+    .panel,
+    .map-caption {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    body.ready .topbar,
+    body.ready .panel,
+    body.ready .map-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    body.ready .panel:nth-child(1) { transition-delay: 260ms; }
+    body.ready .stack .panel:nth-child(1) { transition-delay: 1680ms; }
+    body.ready .stack .panel:nth-child(2) { transition-delay: 1820ms; }
 
     button,
     input {
@@ -196,6 +220,22 @@
       accent-color: var(--gold);
     }
 
+    .layer-toggle {
+      min-width: 42px;
+      min-height: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .layer-toggle.active {
+      color: var(--gold);
+      border-color: rgba(212, 175, 55, 0.56);
+      background: rgba(212, 175, 55, 0.12);
+    }
+
     .main {
       min-width: 0;
       padding: 24px;
@@ -264,10 +304,160 @@
         linear-gradient(0deg, rgba(255, 255, 255, 0.025), transparent);
     }
 
+    .map-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 28px 28px;
+      transition: opacity 520ms ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    body.ready .map-wrap::before {
+      opacity: 1;
+    }
+
     svg {
       display: block;
       width: 100%;
       height: 100%;
+    }
+
+    .atlas-overlay {
+      position: absolute;
+      inset: 18px;
+      width: calc(100% - 36px);
+      height: calc(100% - 36px);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .model-canvas {
+      position: absolute;
+      inset: 18px;
+      width: calc(100% - 36px);
+      height: calc(100% - 36px);
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 420ms ease;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .map-wrap.show-model .model-canvas {
+      opacity: 0.88;
+    }
+
+    .atlas-overlay .interactive {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .draw-line {
+      stroke-dasharray: 1800;
+      stroke-dashoffset: 1800;
+      transition:
+        stroke-dashoffset 1200ms cubic-bezier(0.2, 0.76, 0.2, 1),
+        opacity 520ms ease,
+        stroke 360ms ease,
+        filter 360ms ease;
+    }
+
+    body.ready .draw-line {
+      stroke-dashoffset: 0;
+    }
+
+    .modern-trace {
+      opacity: var(--modern-opacity);
+      transition: opacity 420ms ease;
+    }
+
+    .ancient-trace {
+      opacity: var(--ancient-opacity);
+      filter: drop-shadow(0 0 calc(var(--glow-opacity) * 10px) rgba(212, 175, 55, 0.42));
+      transition: opacity 420ms ease, filter 420ms ease;
+    }
+
+    .bronze-trace {
+      opacity: var(--bronze-opacity);
+      transition: opacity 420ms ease, stroke-width 420ms ease;
+    }
+
+    .site-group {
+      opacity: 0;
+      transform-origin: center;
+      transition: opacity 320ms ease, transform 260ms ease;
+    }
+
+    body.ready .site-group {
+      opacity: 1;
+    }
+
+    body.ready .site-group:nth-of-type(1) { transition-delay: 1180ms; }
+    body.ready .site-group:nth-of-type(2) { transition-delay: 1280ms; }
+    body.ready .site-group:nth-of-type(3) { transition-delay: 1380ms; }
+    body.ready .site-group:nth-of-type(4) { transition-delay: 1480ms; }
+    body.ready .site-group:nth-of-type(5) { transition-delay: 1580ms; }
+
+    .site-core {
+      fill: var(--surface);
+      stroke: rgba(245, 240, 232, 0.82);
+      stroke-width: 1.6;
+      transition: stroke 220ms ease, fill 220ms ease, filter 220ms ease;
+    }
+
+    .site-pulse {
+      fill: none;
+      stroke: rgba(212, 175, 55, 0);
+      stroke-width: 1;
+      transform-origin: center;
+    }
+
+    .site-label,
+    .leader-line {
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+
+    .building-outline {
+      opacity: calc(var(--reveal) * 0.72);
+      transition: opacity 420ms ease, stroke 420ms ease, fill 420ms ease;
+    }
+
+    .site-group:hover .site-core,
+    .site-group.active .site-core {
+      stroke: var(--gold);
+      fill: rgba(212, 175, 55, 0.16);
+      filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.38));
+    }
+
+    .site-group:hover .site-label,
+    .site-group:hover .leader-line,
+    .site-group.active .site-label,
+    .site-group.active .leader-line {
+      opacity: 1;
+    }
+
+    .map-wrap.site-focus .building-outline {
+      opacity: 1;
+      stroke: var(--gold);
+      fill: rgba(212, 175, 55, 0.08);
+    }
+
+    .site-group:hover .site-pulse,
+    .site-group.active .site-pulse {
+      stroke: rgba(212, 175, 55, 0.42);
+      animation: pulse-ring 1500ms ease-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      from { transform: scale(0.75); opacity: 0.48; }
+      to { transform: scale(1.9); opacity: 0; }
     }
 
     .metric-grid {
@@ -322,6 +512,83 @@
       font-size: 14px;
       color: var(--muted);
       line-height: 1.75;
+    }
+
+    .archive-drawer {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .archive-row {
+      border-left: 1px solid rgba(212, 175, 55, 0.48);
+      padding: 8px 0 8px 12px;
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .archive-row.reveal {
+      animation: drawer-reveal 220ms ease forwards;
+    }
+
+    .archive-row h4 {
+      margin: 0 0 4px;
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .archive-row p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    @keyframes drawer-reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mode-strip {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      z-index: 7;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      pointer-events: auto;
+    }
+
+    .mode-strip button {
+      min-height: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(5, 5, 5, 0.72);
+      color: var(--muted);
+      padding: 0 10px;
+      font-size: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .mode-strip button.active {
+      color: var(--text);
+      border-color: rgba(212, 175, 55, 0.58);
+      background: rgba(212, 175, 55, 0.12);
+    }
+
+    .analysis-layer,
+    .evidence-layer,
+    .route-layer {
+      opacity: 0;
+      transition: opacity 420ms ease;
+    }
+
+    .map-wrap.mode-evidence .evidence-layer,
+    .map-wrap.mode-route .route-layer,
+    .map-wrap.mode-analysis .analysis-layer {
+      opacity: 1;
     }
 
     .tag-row {
@@ -550,8 +817,10 @@
       height: calc(100% - 36px);
       object-fit: contain;
       filter: invert(1) grayscale(1) contrast(1.18) brightness(1.08);
-      opacity: 0.82;
+      opacity: var(--modern-opacity);
       mix-blend-mode: screen;
+      z-index: 2;
+      transition: opacity 420ms ease, filter 420ms ease;
     }
 
     .map-caption {
@@ -646,9 +915,78 @@
           <div class="grid-page">
             <div class="panel map-panel">
               <div class="panel-header"><span>叠城</span><span>古今空间显影</span></div>
-              <div class="map-wrap">
+              <div class="map-wrap mode-reveal" id="atlasMap">
+                <div class="mode-strip" aria-label="地图模式切换">
+                  <button class="active" data-mode="reveal">古今显影</button>
+                  <button data-mode="evidence">证据显影</button>
+                  <button data-mode="route">人物路径</button>
+                  <button data-mode="analysis">数据分析</button>
+                </div>
                 <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
                 <img class="real-overlay-map" src="assets/2D视图.svg" alt="宫城核心区古今叠合图" />
+                <canvas class="model-canvas" id="modelCanvas" aria-label="3D 复原线框视图"></canvas>
+                <svg class="atlas-overlay" viewBox="0 0 900 620" role="img" aria-label="古今显影交互图层">
+                  <g class="modern-trace">
+                    <path class="draw-line" d="M86 116 L816 104 M82 304 L812 282 M94 500 L790 506 M140 68 L132 552 M444 42 L444 578 M736 84 L718 554" fill="none" stroke="rgba(0,229,255,0.32)" stroke-width="1" />
+                  </g>
+                  <g class="ancient-trace">
+                    <path class="draw-line" d="M160 112 H730 V510 H160 Z" fill="none" stroke="rgba(245,240,232,0.82)" stroke-width="1.4" />
+                    <path class="draw-line" d="M255 165 H640 V462 H255 Z" fill="none" stroke="rgba(245,240,232,0.72)" stroke-width="1.2" />
+                    <path class="draw-line" d="M170 164 H245 V462 H170 Z M650 164 H720 V462 H650 Z" fill="none" stroke="rgba(245,240,232,0.46)" stroke-width="1" stroke-dasharray="8 6" />
+                  </g>
+                  <g class="bronze-trace">
+                    <path class="draw-line" d="M444 112 V512" fill="none" stroke="var(--gold)" stroke-width="1.8" />
+                  </g>
+                  <g class="building-layer">
+                    <rect class="building-outline" x="410" y="402" width="74" height="50" fill="rgba(245,240,232,0.06)" stroke="var(--gold)" />
+                    <rect class="building-outline" x="414" y="324" width="64" height="46" fill="rgba(245,240,232,0.06)" stroke="var(--gold)" />
+                    <path class="building-outline" d="M206 220 C250 172 328 178 362 228 C316 258 246 258 206 220" fill="rgba(245,240,232,0.04)" stroke="var(--gold)" />
+                  </g>
+                  <g class="evidence-layer">
+                    <path class="draw-line" d="M160 112 H730 V510 H160 Z" fill="none" stroke="rgba(0,229,255,0.62)" stroke-width="2" />
+                    <circle cx="444" cy="510" r="15" fill="none" stroke="rgba(0,229,255,0.5)" />
+                    <circle cx="444" cy="346" r="15" fill="none" stroke="rgba(0,229,255,0.5)" />
+                    <circle cx="286" cy="220" r="15" fill="none" stroke="rgba(212,175,55,0.5)" stroke-dasharray="5 4" />
+                  </g>
+                  <g class="route-layer">
+                    <path class="draw-line" d="M444 512 C444 470 444 430 444 410 C444 380 444 358 444 346 C444 318 444 294 444 278 C416 252 356 232 286 220 C370 192 426 158 444 112" fill="none" stroke="var(--gold)" stroke-width="2" />
+                  </g>
+                  <g class="analysis-layer">
+                    <path d="M160 112 H730 V510 H160 Z" fill="rgba(212,175,55,0.06)" stroke="rgba(212,175,55,0.36)" />
+                    <path d="M255 165 H640 V462 H255 Z" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.28)" />
+                  </g>
+
+                  <g class="site-group interactive" data-site="应天门" data-key="yingtian" transform="translate(444 510)">
+                    <circle class="site-pulse" r="11" />
+                    <circle class="site-core" r="8" />
+                    <line class="leader-line" x1="12" y1="-10" x2="86" y2="-42" stroke="var(--gold)" />
+                    <text class="site-label map-label zh" x="92" y="-44">应天门</text>
+                  </g>
+                  <g class="site-group interactive" data-site="乾元门" data-key="qianyuan" transform="translate(444 426)">
+                    <circle class="site-pulse" r="10" />
+                    <circle class="site-core" r="7" />
+                    <line class="leader-line" x1="12" y1="-8" x2="80" y2="-30" stroke="var(--gold)" />
+                    <text class="site-label map-label zh" x="86" y="-32">乾元门</text>
+                  </g>
+                  <g class="site-group interactive" data-site="明堂" data-key="mingtang" transform="translate(444 346)">
+                    <circle class="site-pulse" r="11" />
+                    <circle class="site-core" r="8" />
+                    <line class="leader-line" x1="12" y1="-8" x2="76" y2="-22" stroke="var(--gold)" />
+                    <text class="site-label map-label zh" x="82" y="-24">明堂</text>
+                  </g>
+                  <g class="site-group interactive" data-site="天堂" data-key="tiantang" transform="translate(444 278)">
+                    <circle class="site-pulse" r="10" />
+                    <circle class="site-core" r="7" />
+                    <line class="leader-line" x1="12" y1="-8" x2="78" y2="-34" stroke="var(--gold)" />
+                    <text class="site-label map-label zh" x="84" y="-36">天堂</text>
+                  </g>
+                  <g class="site-group interactive" data-site="九洲池" data-key="jiuzhou" transform="translate(286 220)">
+                    <circle class="site-pulse" r="10" />
+                    <circle class="site-core" r="7" />
+                    <line class="leader-line" x1="-10" y1="-10" x2="-78" y2="-36" stroke="var(--gold)" />
+                    <text class="site-label map-label zh" x="-134" y="-38">九洲池</text>
+                  </g>
+                </svg>
                 <div class="map-caption">
                   <span>叠城 / 来源：团队 GIS 制图</span>
                   <span>现代洛阳底图 + 隋唐宫城核心范围</span>
@@ -661,12 +999,13 @@
                 <div class="panel-header"><span>说明</span><span>叠城</span></div>
                 <div class="panel-body">
                   <div class="node-card">
-                    <h3>城下有城</h3>
-                    <p>现代道路与公园覆盖在宫城南部和大内范围之上。应天门、明堂、九洲池等点位形成从城市入口到宫廷核心的空间序列。</p>
+                    <h3 id="overviewTitle">古今叠合</h3>
+                    <p id="overviewText">现代道路与公园覆盖在宫城南部和大内范围之上。应天门、明堂、九洲池等点位形成从城市入口到宫廷核心的空间序列。</p>
                     <div class="tag-row"><span class="tag cyan">现代城市</span><span class="tag gold">宫城轮廓</span><span class="tag">空间重叠</span></div>
                   </div>
-                  <div class="stat-row"><span>今天看到</span><span>道路 / 公园 / 建筑</span></div>
-                  <div class="stat-row"><span>古代对应</span><span>宫城 / 大内 / 中轴线</span></div>
+                  <div class="stat-row"><span>当前视角</span><span id="revealState">古今叠合</span></div>
+                  <div class="stat-row"><span>预览点位</span><span id="sitePreview">悬停地图点位</span></div>
+                  <div class="archive-drawer" id="archiveDrawer" aria-live="polite"></div>
                 </div>
               </div>
               <div class="panel">
@@ -674,12 +1013,13 @@
                 <div class="panel-body">
                   <div class="range-control">
                     <label><span>现代</span><span>隋唐</span></label>
-                    <input type="range" min="0" max="100" value="58" aria-label="古今透明度" />
+                    <input id="revealSlider" type="range" min="0" max="100" value="58" aria-label="古今透明度" />
                   </div>
                   <div class="toggle-row"><span>现代底图</span><span class="state">开</span></div>
                   <div class="toggle-row"><span>宫城范围</span><span class="state">开</span></div>
                   <div class="toggle-row"><span>中轴线</span><span class="state">开</span></div>
                   <div class="toggle-row"><span>核心点位</span><span class="state">开</span></div>
+                  <div class="toggle-row"><span>3D 复原体块</span><button class="layer-toggle" id="modelToggle" type="button">关</button></div>
                 </div>
               </div>
             </div>
@@ -804,16 +1144,248 @@
     </div>
   </div>
 
+  <script src="assets/model-preview.js"></script>
   <script>
+    const siteData = {
+      yingtian: {
+        name: "应天门",
+        preview: "宫城正南门，中轴线南端定位锚点。",
+        layers: [
+          ["今日遗址", "对应应天门遗址展示区与周边城市开放空间。"],
+          ["考古证据", "门址、阙台与宫城南墙关系可由发掘资料确认。"],
+          ["唐代复原", "作为宫城正门，连接皇城与大内礼仪空间。"],
+          ["空间意义", "从现代城市入口进入隋唐权力轴线的第一节点。"]
+        ]
+      },
+      qianyuan: {
+        name: "乾元门",
+        preview: "中轴推进节点，由外部礼仪空间转入大内。",
+        layers: [
+          ["今日遗址", "位于宫城核心区内部，现代可见性弱于应天门。"],
+          ["考古证据", "以中轴线位置和宫城内部遗迹关系作为定位依据。"],
+          ["唐代复原", "承担宫城南北空间转换和礼仪过渡功能。"],
+          ["空间意义", "把城市入口叙事推入宫廷核心区域。"]
+        ]
+      },
+      mingtang: {
+        name: "明堂",
+        preview: "礼制核心建筑，是中轴线叙事的中心节点。",
+        layers: [
+          ["今日遗址", "对应明堂遗址展示区及现代游览空间。"],
+          ["考古证据", "建筑基址与考古图件可支撑其核心位置。"],
+          ["唐代复原", "承载武周时期礼制、政治象征与营建叙事。"],
+          ["空间意义", "把中轴线从门址序列转化为权力象征空间。"]
+        ]
+      },
+      tiantang: {
+        name: "天堂",
+        preview: "与明堂共同构成礼制建筑组，涉及营建与火焚事件。",
+        layers: [
+          ["今日遗址", "与明堂展示区形成连续参观节点。"],
+          ["考古证据", "需继续补强硬证据页码、图号和探方字段。"],
+          ["唐代复原", "与明堂共同进入营建、火焚、重建叙事。"],
+          ["空间意义", "让单点建筑转化为时间变化中的建筑组。"]
+        ]
+      },
+      jiuzhou: {
+        name: "九洲池",
+        preview: "宫苑水系节点，将礼仪轴线引入园林空间。",
+        layers: [
+          ["今日遗址", "对应九洲池遗址公园与现代可游览空间。"],
+          ["考古证据", "池岸、岛屿、水系关系来自考古与保护展示资料。"],
+          ["唐代复原", "宫苑、水体和岛屿共同组织游赏与宫廷事件。"],
+          ["空间意义", "从礼制中轴转入宫苑水系和人物事件现场。"]
+        ]
+      }
+    };
+
     const buttons = Array.from(document.querySelectorAll(".nav button"));
     const views = Array.from(document.querySelectorAll(".view"));
+    const atlasMap = document.querySelector("#atlasMap");
+    const revealSlider = document.querySelector("#revealSlider");
+    const overviewTitle = document.querySelector("#overviewTitle");
+    const overviewText = document.querySelector("#overviewText");
+    const revealState = document.querySelector("#revealState");
+    const sitePreview = document.querySelector("#sitePreview");
+    const archiveDrawer = document.querySelector("#archiveDrawer");
+    const modeButtons = Array.from(document.querySelectorAll(".mode-strip button"));
+    const siteGroups = Array.from(document.querySelectorAll(".site-group"));
+    const modelCanvas = document.querySelector("#modelCanvas");
+    const modelToggle = document.querySelector("#modelToggle");
+    let modelRendered = false;
+
+    function setDrawLengths(scope = document) {
+      scope.querySelectorAll(".draw-line").forEach((path) => {
+        if (typeof path.getTotalLength !== "function") return;
+        const length = Math.ceil(path.getTotalLength());
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+        requestAnimationFrame(() => {
+          path.style.strokeDashoffset = "0";
+        });
+      });
+    }
+
+    function updateReveal(value) {
+      const ratio = Number(value) / 100;
+      const modernOpacity = Math.max(0.18, 0.9 - ratio * 0.72);
+      const ancientOpacity = Math.min(1, 0.28 + ratio * 0.86);
+      const bronzeOpacity = Math.min(1, 0.18 + ratio * 1.05);
+      const glowOpacity = Math.min(0.42, ratio * 0.44);
+
+      document.documentElement.style.setProperty("--reveal", ratio.toFixed(2));
+      document.documentElement.style.setProperty("--modern-opacity", modernOpacity.toFixed(2));
+      document.documentElement.style.setProperty("--ancient-opacity", ancientOpacity.toFixed(2));
+      document.documentElement.style.setProperty("--bronze-opacity", bronzeOpacity.toFixed(2));
+      document.documentElement.style.setProperty("--glow-opacity", glowOpacity.toFixed(2));
+
+      if (ratio < 0.34) {
+        overviewTitle.textContent = "今日洛阳";
+        overviewText.textContent = "先看到现代道路、公园和建筑的城市肌理，遗址作为被覆盖的空间线索隐约显现。";
+        revealState.textContent = "今日洛阳";
+      } else if (ratio < 0.72) {
+        overviewTitle.textContent = "古今叠合";
+        overviewText.textContent = "现代道路与公园覆盖在宫城南部和大内范围之上，核心点位开始与中轴线建立关系。";
+        revealState.textContent = "古今叠合";
+      } else {
+        overviewTitle.textContent = "隋唐宫城";
+        overviewText.textContent = "宫城边界、大内范围和中轴线成为主导图层，现代城市退为参照背景。";
+        revealState.textContent = "隋唐宫城";
+      }
+    }
+
+    function setMode(mode) {
+      if (!atlasMap) return;
+      atlasMap.classList.remove("mode-reveal", "mode-evidence", "mode-route", "mode-analysis");
+      atlasMap.classList.add(`mode-${mode}`);
+      modeButtons.forEach((button) => button.classList.toggle("active", button.dataset.mode === mode));
+      const activeLayer = atlasMap.querySelector(`.${mode === "reveal" ? "ancient" : mode}-layer`);
+      setDrawLengths(activeLayer || atlasMap);
+    }
+
+    function renderModel() {
+      if (!modelCanvas || !window.LUOYANG_MODEL_PREVIEW) return;
+      const rect = modelCanvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      const width = Math.max(1, Math.floor(rect.width));
+      const height = Math.max(1, Math.floor(rect.height));
+      modelCanvas.width = Math.floor(width * ratio);
+      modelCanvas.height = Math.floor(height * ratio);
+
+      const ctx = modelCanvas.getContext("2d");
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+
+      const segments = window.LUOYANG_MODEL_PREVIEW.segments || [];
+      if (!segments.length) return;
+
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (const [x1, y1, x2, y2] of segments) {
+        minX = Math.min(minX, x1, x2);
+        maxX = Math.max(maxX, x1, x2);
+        minY = Math.min(minY, y1, y2);
+        maxY = Math.max(maxY, y1, y2);
+      }
+      const spanX = Math.max(1, maxX - minX);
+      const spanY = Math.max(1, maxY - minY);
+      const scale = Math.min(width * 0.78 / spanX, height * 0.72 / spanY);
+      const ox = width * 0.5 - (minX + spanX / 2) * scale;
+      const oy = height * 0.54 - (minY + spanY / 2) * scale;
+
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = 0.7;
+      ctx.strokeStyle = "rgba(245, 240, 232, 0.26)";
+      ctx.beginPath();
+      for (const [x1, y1, x2, y2] of segments) {
+        ctx.moveTo(x1 * scale + ox, y1 * scale + oy);
+        ctx.lineTo(x2 * scale + ox, y2 * scale + oy);
+      }
+      ctx.stroke();
+
+      ctx.lineWidth = 1.15;
+      ctx.strokeStyle = "rgba(212, 175, 55, 0.34)";
+      ctx.beginPath();
+      const step = Math.max(1, Math.floor(segments.length / 1800));
+      for (let i = 0; i < segments.length; i += step) {
+        const [x1, y1, x2, y2] = segments[i];
+        ctx.moveTo(x1 * scale + ox, y1 * scale + oy);
+        ctx.lineTo(x2 * scale + ox, y2 * scale + oy);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(212, 175, 55, 0.72)";
+      ctx.font = "12px JetBrains Mono, SFMono-Regular, monospace";
+      ctx.fillText(`3D OBJ / ${window.LUOYANG_MODEL_PREVIEW.meta.segments} sampled edges`, 18, height - 18);
+      modelRendered = true;
+    }
+
+    function toggleModel() {
+      if (!atlasMap || !modelToggle) return;
+      const active = !atlasMap.classList.contains("show-model");
+      atlasMap.classList.toggle("show-model", active);
+      modelToggle.classList.toggle("active", active);
+      modelToggle.textContent = active ? "开" : "关";
+      if (active && !modelRendered) renderModel();
+    }
+
+    function previewSite(key) {
+      const site = siteData[key];
+      if (!site || !sitePreview) return;
+      sitePreview.textContent = `${site.name} / ${site.preview}`;
+    }
+
+    function openArchive(key) {
+      const site = siteData[key];
+      if (!site || !archiveDrawer) return;
+      overviewTitle.textContent = site.name;
+      overviewText.textContent = site.preview;
+      archiveDrawer.innerHTML = site.layers.map(([title, body], index) => `
+        <div class="archive-row" style="animation-delay:${index * 120}ms">
+          <h4>${title}</h4>
+          <p>${body}</p>
+        </div>
+      `).join("");
+      requestAnimationFrame(() => {
+        archiveDrawer.querySelectorAll(".archive-row").forEach((row) => row.classList.add("reveal"));
+      });
+      siteGroups.forEach((group) => group.classList.toggle("active", group.dataset.key === key));
+      atlasMap?.classList.add("site-focus");
+    }
 
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
         const target = button.dataset.view;
         buttons.forEach((item) => item.classList.toggle("active", item === button));
         views.forEach((view) => view.classList.toggle("active", view.id === target));
+        const activeView = document.querySelector(`#${target}`);
+        if (activeView) setDrawLengths(activeView);
       });
+    });
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => setMode(button.dataset.mode));
+    });
+
+    siteGroups.forEach((group) => {
+      const key = group.dataset.key;
+      group.addEventListener("mouseenter", () => previewSite(key));
+      group.addEventListener("mouseleave", () => {
+        if (!group.classList.contains("active")) sitePreview.textContent = "悬停地图点位";
+      });
+      group.addEventListener("click", () => openArchive(key));
+    });
+
+    revealSlider?.addEventListener("input", (event) => updateReveal(event.target.value));
+    modelToggle?.addEventListener("click", toggleModel);
+    window.addEventListener("resize", () => {
+      if (atlasMap?.classList.contains("show-model")) renderModel();
+    });
+
+    setDrawLengths(document);
+    updateReveal(revealSlider?.value || 58);
+    window.addEventListener("load", () => {
+      requestAnimationFrame(() => document.body.classList.add("ready"));
     });
   </script>
 </body>
