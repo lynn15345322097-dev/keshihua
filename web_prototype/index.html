@@ -581,35 +581,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .mode-strip {
-      position: absolute;
-      left: 18px;
-      top: 18px;
-      z-index: 7;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      pointer-events: auto;
-    }
-
-    .mode-strip button {
-      min-height: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(5, 5, 5, 0.72);
-      color: var(--muted);
-      padding: 0 10px;
-      font-size: 12px;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
-    }
-
-    .mode-strip button.active {
-      color: var(--text);
-      border-color: rgba(212, 175, 55, 0.58);
-      background: rgba(212, 175, 55, 0.12);
-    }
-
     .analysis-layer,
     .evidence-layer,
     .route-layer {
@@ -948,12 +919,6 @@
             <div class="panel map-panel">
               <div class="panel-header"><span>叠城</span><span>古今空间显影</span></div>
               <div class="map-wrap mode-reveal" id="atlasMap">
-                <div class="mode-strip" aria-label="地图模式切换">
-                  <button class="active" data-mode="reveal">古今显影</button>
-                  <button data-mode="evidence">证据显影</button>
-                  <button data-mode="route">人物路径</button>
-                  <button data-mode="analysis">数据分析</button>
-                </div>
                 <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
                 <img class="real-overlay-map" src="assets/2D视图.svg" alt="宫城核心区古今叠合图" />
                 <canvas class="model-canvas" id="modelCanvas" aria-label="3D 复原线框视图"></canvas>
@@ -1276,7 +1241,6 @@
     const revealState = document.querySelector("#revealState");
     const sitePreview = document.querySelector("#sitePreview");
     const archiveDrawer = document.querySelector("#archiveDrawer");
-    const modeButtons = Array.from(document.querySelectorAll(".mode-strip button"));
     const siteGroups = Array.from(document.querySelectorAll(".site-group"));
     const evidenceSites = Array.from(document.querySelectorAll(".evidence-site"));
     const heritageRoutePath = document.querySelector("#heritageRoutePath");
@@ -1371,15 +1335,6 @@
         overviewText.textContent = "宫城边界、大内范围和中轴线成为主导图层，现代城市退为参照背景。";
         revealState.textContent = "隋唐宫城";
       }
-    }
-
-    function setMode(mode) {
-      if (!atlasMap) return;
-      atlasMap.classList.remove("mode-reveal", "mode-evidence", "mode-route", "mode-analysis");
-      atlasMap.classList.add(`mode-${mode}`);
-      modeButtons.forEach((button) => button.classList.toggle("active", button.dataset.mode === mode));
-      const activeLayer = atlasMap.querySelector(`.${mode === "reveal" ? "ancient" : mode}-layer`);
-      setDrawLengths(activeLayer || atlasMap);
     }
 
     function renderModel() {
@@ -1505,10 +1460,6 @@
         const activeView = document.querySelector(`#${target}`);
         if (activeView) setDrawLengths(activeView);
       });
-    });
-
-    modeButtons.forEach((button) => {
-      button.addEventListener("click", () => setMode(button.dataset.mode));
     });
 
     siteGroups.forEach((group) => {
