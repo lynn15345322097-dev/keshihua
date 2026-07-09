@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>隋唐洛阳宫城的古今叠合</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --surface: #0e0e0e;
+      --surface-2: #141414;
+      --surface-3: #1d1c1b;
+      --line: rgba(255, 255, 255, 0.18);
+      --line-strong: rgba(255, 255, 255, 0.58);
+      --text: #f5f0e8;
+      --muted: #a9a090;
+      --dim: #6b6559;
+      --gold: #d4af37;
+      --gold-soft: rgba(212, 175, 55, 0.22);
+      --cyan: #00e5ff;
+      --cyan-soft: rgba(0, 229, 255, 0.18);
+      --danger: #ffb4ab;
+      --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      --serif: "Libre Caslon Text", "Songti SC", "STSong", Georgia, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      letter-spacing: 0;
+    }
+
+    body {
+      overflow-x: hidden;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 54px 1fr;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 260px 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 5, 5, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .nav button,
+    .ghost-btn {
+      height: 30px;
+      padding: 0 12px;
+      border: 1px solid transparent;
+      border-radius: 0;
+      background: transparent;
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .nav button.active {
+      color: var(--text);
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .ghost-btn {
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      min-height: calc(100vh - 54px);
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: rgba(8, 8, 8, 0.72);
+      padding: 22px 18px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .title-block {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+
+    .title-block h1 {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1.08;
+      font-weight: 400;
+    }
+
+    .title-block p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .control-group {
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+
+    .toggle-row,
+    .stat-row,
+    .legend-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      min-height: 26px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .toggle-row span:first-child,
+    .stat-row span:first-child {
+      color: var(--text);
+    }
+
+    .state {
+      color: var(--cyan);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    .range-control {
+      display: grid;
+      gap: 10px;
+      padding: 4px 0 2px;
+    }
+
+    .range-control label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text);
+      font-size: 11px;
+    }
+
+    .range-control input {
+      width: 100%;
+      accent-color: var(--gold);
+    }
+
+    .main {
+      min-width: 0;
+      padding: 22px;
+    }
+
+    .view {
+      display: none;
+      min-height: calc(100vh - 98px);
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .grid-page {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      min-height: calc(100vh - 98px);
+    }
+
+    .grid-page.wide-right {
+      grid-template-columns: minmax(0, 0.94fr) 420px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: rgba(10, 10, 10, 0.74);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .panel-body {
+      padding: 14px;
+    }
+
+    .map-panel {
+      min-height: 620px;
+    }
+
+    .map-wrap {
+      position: relative;
+      height: calc(100% - 38px);
+      min-height: 582px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(212, 175, 55, 0.08), transparent 34%),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.025), transparent);
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      border: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+
+    .metric {
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.025);
+      min-height: 78px;
+    }
+
+    .metric .label {
+      color: var(--dim);
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .metric .value {
+      font-size: 28px;
+      color: var(--text);
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .metric .value small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .node-card {
+      border: 1px solid var(--line);
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .node-card h3 {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .node-card p {
+      margin: 0;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      padding: 4px 6px;
+    }
+
+    .tag.gold {
+      color: var(--gold);
+      border-color: rgba(212, 175, 55, 0.48);
+      background: var(--gold-soft);
+    }
+
+    .tag.cyan {
+      color: var(--cyan);
+      border-color: rgba(0, 229, 255, 0.42);
+      background: var(--cyan-soft);
+    }
+
+    .tag.danger {
+      color: var(--danger);
+      border-color: rgba(255, 180, 171, 0.38);
+    }
+
+    .chart-line {
+      height: 74px;
+      border-left: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      margin: 12px 0 6px;
+    }
+
+    .chart-line svg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .split-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      border: 1px solid var(--line);
+    }
+
+    .mini-card {
+      padding: 12px;
+      min-height: 118px;
+      background: rgba(255, 255, 255, 0.02);
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mini-card:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .mini-card h4 {
+      margin: 0 0 8px;
+      font-size: 11px;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .mini-card p,
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--line);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 9px;
+      height: 9px;
+      border: 1px solid var(--cyan);
+      background: var(--surface);
+    }
+
+    .timeline-item h4 {
+      margin: 0 0 4px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .section-view {
+      height: 500px;
+      border: 1px solid var(--line);
+      margin-bottom: 18px;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.9fr 0.8fr;
+      gap: 1px;
+      border: 1px solid var(--line);
+    }
+
+    .bottom-grid .mini-card {
+      border-bottom: 0;
+    }
+
+    .corner {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-color: var(--line-strong);
+    }
+
+    .corner.tl { top: 8px; left: 8px; border-top: 1px solid; border-left: 1px solid; }
+    .corner.tr { top: 8px; right: 8px; border-top: 1px solid; border-right: 1px solid; }
+    .corner.bl { bottom: 8px; left: 8px; border-bottom: 1px solid; border-left: 1px solid; }
+    .corner.br { bottom: 8px; right: 8px; border-bottom: 1px solid; border-right: 1px solid; }
+
+    .map-label {
+      fill: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .map-label.zh {
+      font-family: "Songti SC", "STSong", serif;
+      font-size: 15px;
+      fill: var(--text);
+    }
+
+    .modern {
+      stroke: rgba(0, 229, 255, 0.28);
+      stroke-width: 1;
+      fill: none;
+    }
+
+    .ancient {
+      stroke: rgba(245, 240, 232, 0.88);
+      stroke-width: 1.4;
+      fill: none;
+    }
+
+    .ancient-soft {
+      stroke: rgba(245, 240, 232, 0.44);
+      stroke-width: 1;
+      fill: none;
+    }
+
+    .gold-line {
+      stroke: var(--gold);
+      stroke-width: 1.4;
+      fill: none;
+    }
+
+    .cyan-line {
+      stroke: var(--cyan);
+      stroke-width: 1.1;
+      fill: none;
+    }
+
+    .dash {
+      stroke-dasharray: 7 6;
+    }
+
+    .dot {
+      stroke-dasharray: 2 6;
+    }
+
+    .node {
+      fill: var(--surface);
+      stroke: var(--text);
+      stroke-width: 1.4;
+    }
+
+    .node.gold {
+      stroke: var(--gold);
+      filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.65));
+    }
+
+    .node.cyan {
+      stroke: var(--cyan);
+      filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.55));
+    }
+
+    .mobile-note {
+      display: none;
+    }
+
+    .real-overlay-map {
+      position: absolute;
+      inset: 18px;
+      width: calc(100% - 36px);
+      height: calc(100% - 36px);
+      object-fit: contain;
+      filter: invert(1) grayscale(1) contrast(1.18) brightness(1.08);
+      opacity: 0.82;
+      mix-blend-mode: screen;
+    }
+
+    .map-caption {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    @media (max-width: 1080px) {
+      .topbar {
+        grid-template-columns: 1fr;
+        height: auto;
+        padding: 14px;
+        position: static;
+      }
+
+      .nav {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+
+      .shell,
+      .grid-page,
+      .grid-page.wide-right {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .metric-grid,
+      .bottom-grid,
+      .split-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .map-panel {
+        min-height: 520px;
+      }
+
+      .map-wrap {
+        min-height: 480px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">隋唐洛阳宫城的古今叠合</div>
+      <nav class="nav" aria-label="页面导航">
+        <button class="active" data-view="overview">叠城</button>
+        <button data-view="evidence">寻址</button>
+        <button data-view="routes">入境</button>
+      </nav>
+      <button class="ghost-btn">当前范围：宫城核心区</button>
+    </header>
+
+    <div class="shell">
+      <main class="main">
+        <section id="overview" class="view active">
+          <div class="grid-page">
+            <div class="panel map-panel">
+              <div class="panel-header"><span>叠城</span><span>古今空间显影</span></div>
+              <div class="map-wrap">
+                <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+                <img class="real-overlay-map" src="assets/2D视图.svg" alt="宫城核心区古今叠合图" />
+                <div class="map-caption">
+                  <span>叠城 / 来源：团队 GIS 制图</span>
+                  <span>现代洛阳底图 + 隋唐宫城核心范围</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack">
+              <div class="panel">
+                <div class="panel-header"><span>说明</span><span>叠城</span></div>
+                <div class="panel-body">
+                  <div class="node-card">
+                    <h3>城下有城</h3>
+                    <p>现代道路与公园覆盖在宫城南部和大内范围之上。应天门、明堂、九洲池等点位形成从城市入口到宫廷核心的空间序列。</p>
+                    <div class="tag-row"><span class="tag cyan">现代城市</span><span class="tag gold">宫城轮廓</span><span class="tag">空间重叠</span></div>
+                  </div>
+                  <div class="stat-row"><span>今天看到</span><span>道路 / 公园 / 建筑</span></div>
+                  <div class="stat-row"><span>古代对应</span><span>宫城 / 大内 / 中轴线</span></div>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="panel-header"><span>叠合控制</span><span>古今透明度</span></div>
+                <div class="panel-body">
+                  <div class="range-control">
+                    <label><span>现代</span><span>隋唐</span></label>
+                    <input type="range" min="0" max="100" value="58" aria-label="古今透明度" />
+                  </div>
+                  <div class="toggle-row"><span>现代底图</span><span class="state">开</span></div>
+                  <div class="toggle-row"><span>宫城范围</span><span class="state">开</span></div>
+                  <div class="toggle-row"><span>中轴线</span><span class="state">开</span></div>
+                  <div class="toggle-row"><span>核心点位</span><span class="state">开</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="evidence" class="view">
+          <div class="grid-page wide-right">
+            <div class="panel map-panel">
+              <div class="panel-header"><span>寻址</span><span>证据如何定位遗址</span></div>
+              <div class="map-wrap">
+                <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+                <svg viewBox="0 0 900 620" role="img" aria-label="寻址证据地图">
+                  <rect width="900" height="620" fill="rgba(255,255,255,0.01)"/>
+                  <path class="modern" d="M78 116 L818 104 M82 304 L804 282 M94 500 L790 506 M140 68 L132 552 M444 42 L444 578 M736 84 L718 554"/>
+                  <path class="ancient" d="M160 112 H730 V510 H160 Z"/>
+                  <path class="ancient" d="M255 165 H640 V462 H255 Z"/>
+                  <path class="ancient dash" d="M170 164 H245 V462 H170 Z M650 164 H720 V462 H650 Z"/>
+                  <path class="ancient-soft dot" d="M155 58 H735 V92 H155 Z"/>
+                  <path class="gold-line" d="M444 112 V512"/>
+                  <path class="cyan-line" d="M410 402 H484 V452 H410 Z"/>
+                  <path class="cyan-line" d="M414 324 H478 V370 H414 Z"/>
+                  <path class="cyan-line dash" d="M206 220 C250 172 328 178 362 228 C316 258 246 258 206 220"/>
+                  <circle class="node cyan" cx="444" cy="510" r="8"/>
+                  <circle class="node cyan" cx="444" cy="426" r="7"/>
+                  <circle class="node cyan" cx="444" cy="346" r="7"/>
+                  <circle class="node gold" cx="286" cy="220" r="7"/>
+                  <circle class="node" cx="690" cy="462" r="7"/>
+                  <text class="map-label zh" x="166" y="106">考古确认：可直接入图</text>
+                  <text class="map-label zh" x="658" y="158">报告依据：需要配准</text>
+                  <text class="map-label zh" x="558" y="82">文献线索：辅助定位</text>
+                  <text class="map-label zh" x="462" y="514">应天门 A</text>
+                  <text class="map-label zh" x="462" y="430">乾元门 A</text>
+                  <text class="map-label zh" x="462" y="350">明堂 A</text>
+                  <text class="map-label zh" x="242" y="205">九洲池 B</text>
+                  <text class="map-label zh" x="650" y="482">嘉豫门 B/C</text>
+                </svg>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <div class="panel-header"><span>阅读方式</span><span>点 / 线 / 面</span></div>
+                <div class="panel-body">
+                  <div class="toggle-row"><span>点</span><span class="state">遗址</span></div>
+                  <div class="toggle-row"><span>线</span><span class="state">轴线 / 墙线 / 水渠</span></div>
+                  <div class="toggle-row"><span>面</span><span class="state">宫城 / 大内 / 九洲池</span></div>
+                  <div class="tag-row"><span class="tag cyan">A 发掘确认</span><span class="tag gold">B 待配准</span><span class="tag">C 文献推定</span></div>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="panel-header"><span>点位证据卡</span><span>应天门</span></div>
+                <div class="panel-body">
+                  <div class="node-card">
+                    <h3>应天门</h3>
+                    <p>门址、阙台与宫城南墙关系可由发掘资料确认，是中轴线南端最稳定的定位锚点。</p>
+                  </div>
+                  <div class="stat-row"><span>几何类型</span><span>点 / 面</span></div>
+                  <div class="stat-row"><span>证据等级</span><span>A</span></div>
+                  <div class="stat-row"><span>资料来源</span><span>第二册 / 发掘图件</span></div>
+                  <div class="stat-row"><span>追溯字段</span><span>页码 / 图号 / 探方号</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="routes" class="view">
+          <div class="grid-page">
+            <div class="panel map-panel">
+              <div class="panel-header"><span>入境</span><span>人物事件进入历史现场</span></div>
+              <div class="map-wrap">
+                <svg viewBox="0 0 900 620" role="img" aria-label="入境人物事件地图">
+                  <path class="modern" d="M104 510 L804 492 M92 310 L820 286 M130 118 L784 104 M172 62 L152 552 M450 42 L450 578 M720 78 L702 548"/>
+                  <path class="ancient-soft" d="M166 114 H734 V514 H166 Z"/>
+                  <path class="ancient-soft" d="M265 164 H636 V464 H265 Z"/>
+                  <path class="gold-line" d="M450 514 C450 474 450 446 450 410 C450 380 450 360 450 340 C450 318 450 296 450 278 C450 230 450 178 450 116"/>
+                  <path class="gold-line dash" d="M450 278 C420 250 360 230 292 218"/>
+                  <circle class="node gold" cx="450" cy="514" r="10"/>
+                  <circle class="node gold" cx="450" cy="410" r="9"/>
+                  <circle class="node gold" cx="450" cy="340" r="9"/>
+                  <circle class="node gold" cx="450" cy="278" r="9"/>
+                  <circle class="node gold" cx="450" cy="116" r="9"/>
+                  <circle class="node gold" cx="292" cy="218" r="9"/>
+                  <text class="map-label zh" x="466" y="518">01 应天门</text>
+                  <text class="map-label zh" x="466" y="414">02 乾元门</text>
+                  <text class="map-label zh" x="466" y="344">03 明堂</text>
+                  <text class="map-label zh" x="466" y="282">04 天堂</text>
+                  <text class="map-label zh" x="210" y="204">05 九洲池</text>
+                  <text class="map-label zh" x="466" y="120">06 玄武门</text>
+                  <text class="map-label zh" x="308" y="574">路径由遗址节点与历史事件生成</text>
+                </svg>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <div class="panel-header"><span>人物切换</span><span>当前：武则天</span></div>
+                <div class="panel-body">
+                  <div class="node-card">
+                    <h3>当前人物：武则天</h3>
+                    <p>武则天不是唯一叙事对象，而是第一条示范路径。后续可切换薛怀义、张柬之、唐中宗、唐玄宗等人物。</p>
+                    <div class="tag-row"><span class="tag gold">武则天</span><span class="tag">薛怀义</span><span class="tag">张柬之</span><span class="tag">唐中宗</span><span class="tag">唐玄宗</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="panel-header"><span>事件时间线</span><span>空间顺序</span></div>
+                <div class="panel-body">
+                  <div class="timeline">
+                    <div class="timeline-item"><h4>应天门</h4><p>武则天登基。</p></div>
+                    <div class="timeline-item"><h4>乾元门</h4><p>中轴过渡。</p></div>
+                    <div class="timeline-item"><h4>明堂 / 天堂</h4><p>营建、火焚、重建。</p></div>
+                    <div class="timeline-item"><h4>九洲池</h4><p>薛怀义被杀。</p></div>
+                    <div class="timeline-item"><h4>玄武门</h4><p>神龙政变。</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const buttons = Array.from(document.querySelectorAll(".nav button"));
+    const views = Array.from(document.querySelectorAll(".view"));
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const target = button.dataset.view;
+        buttons.forEach((item) => item.classList.toggle("active", item === button));
+        views.forEach((view) => view.classList.toggle("active", view.id === target));
+      });
+    });
+  </script>
+</body>
+</html>
