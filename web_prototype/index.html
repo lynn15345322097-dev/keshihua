@@ -1048,7 +1048,7 @@
                   </g>
                   <g class="evidence-site interactive" data-key="qianyuan" transform="translate(444 426)">
                     <circle class="node cyan" r="7"/>
-                    <text class="map-label zh" x="18" y="4">乾元门 B</text>
+                    <text class="map-label zh" x="18" y="4">乾元门 A</text>
                   </g>
                   <g class="evidence-site interactive" data-key="mingtang" transform="translate(444 346)">
                     <circle class="node cyan" r="7"/>
@@ -1056,7 +1056,11 @@
                   </g>
                   <g class="evidence-site interactive" data-key="tiantang" transform="translate(444 278)">
                     <circle class="node cyan" r="7"/>
-                    <text class="map-label zh" x="18" y="4">天堂 B</text>
+                    <text class="map-label zh" x="18" y="4">天堂 待补</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="yongtai_bulang" transform="translate(444 452)">
+                    <circle class="node cyan" r="6"/>
+                    <text class="map-label zh" x="18" y="4">永泰门步廊 A</text>
                   </g>
                   <g class="evidence-site interactive" data-key="jiuzhou" transform="translate(286 220)">
                     <circle class="node gold" r="7"/>
@@ -1091,9 +1095,11 @@
                   </div>
                   <div class="stat-row"><span>几何类型</span><span id="evidenceGeometry">点 / 面</span></div>
                   <div class="stat-row"><span>证据等级</span><span id="evidenceGrade">A</span></div>
+                  <div class="stat-row"><span>对象编号</span><span id="evidenceObjectIds">GIS-G001</span></div>
                   <div class="stat-row"><span>资料来源</span><span id="evidenceSource">第二册 / 发掘图件</span></div>
+                  <div class="stat-row"><span>原表状态</span><span id="evidenceSourceStatus">可入库</span></div>
                   <div class="stat-row"><span>坐标状态</span><span id="evidenceCoord">OSM + 待校准</span></div>
-                  <div class="stat-row"><span>现代锚点</span><span id="evidenceAnchor">应天门遗址</span></div>
+                  <div class="stat-row"><span>制图方法</span><span id="evidenceMethod">发掘资料确认</span></div>
                 </div>
               </div>
             </div>
@@ -1160,10 +1166,14 @@
 
   <script src="assets/real-sites.js"></script>
   <script src="assets/model-preview.js"></script>
+  <script src="assets/gis-core-data.js"></script>
   <script>
     const realSiteDataset = window.LUOYANG_REAL_SITES || null;
     const realSites = realSiteDataset?.sites || [];
     const realSiteByKey = Object.fromEntries(realSites.map((site) => [site.key, site]));
+    const gisCoreDataset = window.LUOYANG_GIS_CORE_DATA || null;
+    const gisCoreObjects = gisCoreDataset?.objects || [];
+    const gisCoreByKey = Object.fromEntries(gisCoreObjects.map((item) => [item.key, item]));
 
     const buttons = Array.from(document.querySelectorAll(".nav button"));
     const views = Array.from(document.querySelectorAll(".view"));
@@ -1180,9 +1190,11 @@
     const evidenceCardText = document.querySelector("#evidenceCardText");
     const evidenceGeometry = document.querySelector("#evidenceGeometry");
     const evidenceGrade = document.querySelector("#evidenceGrade");
+    const evidenceObjectIds = document.querySelector("#evidenceObjectIds");
     const evidenceSource = document.querySelector("#evidenceSource");
+    const evidenceSourceStatus = document.querySelector("#evidenceSourceStatus");
     const evidenceCoord = document.querySelector("#evidenceCoord");
-    const evidenceAnchor = document.querySelector("#evidenceAnchor");
+    const evidenceMethod = document.querySelector("#evidenceMethod");
     const modelCanvas = document.querySelector("#modelCanvas");
     const modelToggle = document.querySelector("#modelToggle");
     let modelRendered = false;
@@ -1336,15 +1348,19 @@
 
     function updateEvidenceCard(key) {
       const real = realSiteByKey[key];
-      if (!real) return;
-      evidenceCardStatus.textContent = real.name;
-      evidenceCardTitle.textContent = real.name;
-      evidenceCardText.textContent = real.evidenceNote;
-      evidenceGeometry.textContent = real.geometry.replace("_", " / ");
-      evidenceGrade.textContent = real.evidenceGrade;
-      evidenceSource.textContent = real.evidenceSource;
-      evidenceCoord.textContent = `${real.coordinateStatus} / ${formatCoord(real)}`;
-      evidenceAnchor.textContent = real.modernAnchor;
+      const core = gisCoreByKey[key];
+      if (!real && !core) return;
+      const name = core?.name || real.name;
+      evidenceCardStatus.textContent = name;
+      evidenceCardTitle.textContent = name;
+      evidenceCardText.textContent = core?.ancientPosition || core?.gisMethod || real.evidenceNote;
+      evidenceGeometry.textContent = (core?.geometry || real.geometry).replace("_", " / ");
+      evidenceGrade.textContent = core?.evidenceGrade || real.evidenceGrade;
+      evidenceObjectIds.textContent = core?.sourceObjectIds?.join("；") || "待补充";
+      evidenceSource.textContent = core?.source || real.evidenceSource;
+      evidenceSourceStatus.textContent = core?.sourceStatus || "待补充";
+      evidenceCoord.textContent = core?.coordStatus || `${real.coordinateStatus} / ${formatCoord(real)}`;
+      evidenceMethod.textContent = core?.gisMethod || real.modernAnchor;
       evidenceSites.forEach((group) => group.classList.toggle("active", group.dataset.key === key));
     }
 

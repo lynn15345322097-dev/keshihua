@@ -1,0 +1,14 @@
+﻿site_id,key,name,category,parent_key,primary_geometry,display_layer,evidence_grade,source_object_ids,data_status
+SITE_001,palace_city,宫城/紫微城范围,city_boundary,,polygon,叠城,A,GIS-A001；GIS-L001；GIS-L002；GIS-L003；GIS-L004,待配准
+SITE_002,danei,大内范围,palace_core,palace_city,polygon,叠城,A,GIS-A002；GIS-L005；GIS-L006,待配准
+SITE_003,east_gecheng,东隔城,palace_subarea,palace_city,polygon,叠城,B,GIS-A003；GIS-DOC001；GIS-DOC002；GIS-DOC052；GIS-DOC053,待配准
+SITE_004,west_gecheng,西隔城,palace_subarea,palace_city,polygon,叠城,B,GIS-A004；GIS-DOC015；GIS-DOC016,待配准
+SITE_005,east_jiacheng,东夹城,palace_subarea,palace_city,polygon,叠城,B/C,GIS-DOC010；GIS-DOC011；GIS-DOC012；GIS-DOC013；GIS-DOC014,待回查
+SITE_006,west_jiacheng,西夹城,palace_subarea,palace_city,polygon,叠城,B,GIS-DOC031；GIS-DOC032；GIS-DOC079；GIS-DOC080；GIS-DOC082,待配准
+SITE_007,yingtian,应天门,gate,palace_city,point_area,寻址,A,GIS-G001；GIS-G002,OSM锚点，遗址范围待GIS校准
+SITE_008,xuanwu,玄武门,gate,palace_city,point,寻址,B,GIS-G007；GIS-DOC043,中轴推算，待GIS控制点
+SITE_009,qianyuan,乾元门,gate,danei,point_area,寻址,A,GIS-X013,中轴推算，待GIS控制点
+SITE_010,mingtang,明堂,ritual_building,danei,point_area,寻址,A,GIS-X014,中轴推算，待基址中心复核
+SITE_011,tiantang,天堂,ritual_building,danei,point_area,寻址,待补充,,2.0总表暂无独立天堂记录，需补明堂天堂专题资料
+SITE_012,yongtai_bulang,永泰门步廊,corridor,danei,line_area,寻址,A,GIS-X011,待配准
+SITE_013,jiuzhou,九洲池,garden_water,palace_city,polygon,寻址,B,GIS-DOC021；GIS-DOC061；GIS-DOC075；GIS-DOC076；GIS-DOC077；GIS-DOC078,OSM园区锚点，池体边界待图6-64/图6-65矢量化

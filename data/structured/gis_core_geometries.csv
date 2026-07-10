@@ -1,0 +1,14 @@
+﻿geom_id,key,name,geometry_type,lng,lat,svg_geometry_json,coord_source,coord_status
+GEOM_001,palace_city,宫城/紫微城范围,polygon,,,"{""type"": ""rect"", ""x"": 160, ""y"": 112, ""width"": 570, ""height"": 398}",current_overlay_svg,待配准
+GEOM_002,danei,大内范围,polygon,,,"{""type"": ""rect"", ""x"": 255, ""y"": 165, ""width"": 385, ""height"": 297}",current_overlay_svg,待配准
+GEOM_003,east_gecheng,东隔城,polygon,,,"{""type"": ""rect"", ""x"": 650, ""y"": 164, ""width"": 70, ""height"": 298}",current_overlay_svg,待配准
+GEOM_004,west_gecheng,西隔城,polygon,,,"{""type"": ""rect"", ""x"": 170, ""y"": 164, ""width"": 75, ""height"": 298}",current_overlay_svg,待配准
+GEOM_005,east_jiacheng,东夹城,polygon,,,"{""type"": ""rect"", ""x"": 715, ""y"": 390, ""width"": 48, ""height"": 120}",current_overlay_svg,待回查
+GEOM_006,west_jiacheng,西夹城,polygon,,,"{""type"": ""rect"", ""x"": 132, ""y"": 392, ""width"": 58, ""height"": 118}",current_overlay_svg,待配准
+GEOM_007,yingtian,应天门,point_area,112.4545641,34.6769932,"{""type"": ""point"", ""x"": 444, ""y"": 510}",OSM historic/city_gate,OSM锚点，遗址范围待GIS校准
+GEOM_008,xuanwu,玄武门,point,112.4545641,34.68461,"{""type"": ""point"", ""x"": 444, ""y"": 112}",axis-derived placeholder,中轴推算，待GIS控制点
+GEOM_009,qianyuan,乾元门,point_area,112.4545641,34.67905,"{""type"": ""point"", ""x"": 444, ""y"": 426}",axis-derived placeholder,中轴推算，待GIS控制点
+GEOM_010,mingtang,明堂,point_area,112.4545641,34.6805,"{""type"": ""point"", ""x"": 444, ""y"": 346}",axis-derived placeholder,中轴推算，待基址中心复核
+GEOM_011,tiantang,天堂,point_area,112.4545641,34.68173,"{""type"": ""point"", ""x"": 444, ""y"": 278}",axis-derived placeholder,2.0总表暂无独立天堂记录，需补明堂天堂专题资料
+GEOM_012,yongtai_bulang,永泰门步廊,line_area,,,"{""type"": ""line"", ""points"": [[444, 452], [444, 510]]}",current_overlay_svg,待配准
+GEOM_013,jiuzhou,九洲池,polygon,112.4462691,34.6810348,"{""type"": ""ellipse_area"", ""cx"": 286, ""cy"": 220, ""rx"": 78, ""ry"": 48}",OSM heritage park centroid,OSM园区锚点，池体边界待图6-64/图6-65矢量化
