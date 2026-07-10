@@ -1,0 +1,21 @@
+{
+"type": "FeatureCollection",
+"name": "苑门",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"xy_coordinate_resolution": 8.98315e-10,
+"z_coordinate_resolution": 0.0001,
+"features": [
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.4458734404,34.6251440034,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.3546303061,34.5747197068,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.4138207983,34.5840790685,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.3014507536,34.5817995998,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.2757062473,34.6100082019,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.2665022606,34.6390227213,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.2632081425,34.6905637314,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.2888972134,34.7228838883,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.3240413421,34.7276800775,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.3882838675,34.726728796,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.437869658,34.7300475396,0.0]}},
+{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[112.4621087629,34.7064402004,0.0]}}
+]
+}

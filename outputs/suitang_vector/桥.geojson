@@ -1,0 +1,15 @@
+{
+"type": "FeatureCollection",
+"name": "桥",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"xy_coordinate_resolution": 8.98315e-10,
+"z_coordinate_resolution": 0.0001,
+"features": [
+{"type":"Feature","properties":{"桥":"会通桥","Shape_Length":285.4564812595093},"geometry":{"type":"MultiLineString","coordinates":[[[112.4921087484,34.6756449315],[112.4923968195,34.6730827736]]]}},
+{"type":"Feature","properties":{"桥":"新中桥","Shape_Length":432.65281071399056},"geometry":{"type":"MultiLineString","coordinates":[[[112.4796949965,34.6754477462],[112.4801461441,34.671565539]]]}},
+{"type":"Feature","properties":{"桥":"黄道桥","Shape_Length":163.92356723224776},"geometry":{"type":"MultiLineString","coordinates":[[[112.4549664702,34.6707820637],[112.4551795195,34.6693149295]]]}},
+{"type":"Feature","properties":{"桥":"天津桥","Shape_Length":261.34605937382997},"geometry":{"type":"MultiLineString","coordinates":[[[112.4553307686,34.6682733451],[112.4556704122,34.6659342664]]]}},
+{"type":"Feature","properties":{"桥":"星津桥","Shape_Length":174.83014972201897},"geometry":{"type":"MultiLineString","coordinates":[[[112.4558137123,34.6649473362],[112.4560409051,34.6633825839]]]}},
+{"type":"Feature","properties":{"桥":"旧中桥","Shape_Length":424.13297027139328},"geometry":{"type":"MultiLineString","coordinates":[[[112.4730321164,34.6746437139],[112.4735133828,34.6708411867]]]}}
+]
+}

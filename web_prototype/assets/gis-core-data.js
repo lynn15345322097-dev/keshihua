@@ -4,7 +4,30 @@ window.LUOYANG_GIS_CORE_DATA = {
   "notes": [
     "原始2.0总表保持不动，本文件只抽取网页原型需要的核心对象。",
     "svgGeometry用于当前原型叠合图定位，coord字段用于后续替换为GIS精确坐标。",
-    "天堂在2.0总表中未检出独立记录，需继续补明堂天堂专题资料。"
+    "天堂在2.0总表中未检出独立记录，需继续补明堂天堂专题资料。",
+    "vectorLayers来自隋唐洛阳城.gdb，已导出为EPSG:4326 GeoJSON，可作为叠城页的真实矢量底图。"
+  ],
+  "vectorSource": {
+    "name": "隋唐洛阳城.gdb",
+    "path": "/Users/lynnliu/Downloads/古代城市矢量/隋唐洛阳城.gdb",
+    "exportedCrs": "EPSG:4326",
+    "webPath": "assets/suitang_geojson/",
+    "inventory": "assets/suitang_geojson/index.json"
+  },
+  "vectorLayers": [
+    {"name": "桥", "file": "桥.geojson", "geometryType": "Multi Line String", "featureCount": 6, "use": "背景交通/水系关系参考"},
+    {"name": "城门", "file": "城门.geojson", "geometryType": "Multi Point", "featureCount": 26, "use": "城门点位参考"},
+    {"name": "市", "file": "市.geojson", "geometryType": "Multi Polygon", "featureCount": 3, "use": "全城功能区背景"},
+    {"name": "里坊", "file": "里坊.geojson", "geometryType": "Multi Polygon", "featureCount": 109, "use": "全城里坊格网背景"},
+    {"name": "太微城_内城", "file": "太微城_内城.geojson", "geometryType": "Multi Polygon", "featureCount": 5, "use": "宫城核心空间参考"},
+    {"name": "外郭城墙", "file": "外郭城墙.geojson", "geometryType": "Multi Line String", "featureCount": 2, "use": "全城边界参考"},
+    {"name": "紫薇城", "file": "紫薇城.geojson", "geometryType": "Multi Polygon", "featureCount": 6, "use": "宫城/紫微城范围参考"},
+    {"name": "上阳宫", "file": "上阳宫.geojson", "geometryType": "Multi Polygon", "featureCount": 16, "use": "当前范围外背景"},
+    {"name": "上阳宫门", "file": "上阳宫门.geojson", "geometryType": "Multi Point", "featureCount": 7, "use": "当前范围外背景"},
+    {"name": "上阳宫城墙", "file": "上阳宫城墙.geojson", "geometryType": "Multi Line String", "featureCount": 1, "use": "当前范围外背景"},
+    {"name": "离宫", "file": "离宫.geojson", "geometryType": "3D Multi Polygon", "featureCount": 56, "use": "神都苑背景，二维导出已丢弃Z值"},
+    {"name": "苑墙", "file": "苑墙.geojson", "geometryType": "3D Multi Line String", "featureCount": 1, "use": "神都苑背景，二维导出已丢弃Z值"},
+    {"name": "苑门", "file": "苑门.geojson", "geometryType": "3D Point", "featureCount": 12, "use": "神都苑背景，二维导出已丢弃Z值"}
   ],
   "objects": [
     {

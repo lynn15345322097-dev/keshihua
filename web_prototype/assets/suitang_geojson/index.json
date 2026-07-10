@@ -1,0 +1,85 @@
+{
+  "source": "/Users/lynnliu/Downloads/古代城市矢量/隋唐洛阳城.gdb",
+  "crs": "EPSG:4326",
+  "note": "Exported from 隋唐洛阳城.gdb with GDAL. Use as spatial base data; evidence grades still come from the archaeological extraction table.",
+  "layers": [
+    {
+      "name": "桥",
+      "file": "桥.geojson",
+      "geometry_type": "Multi Line String",
+      "feature_count": 6
+    },
+    {
+      "name": "城门",
+      "file": "城门.geojson",
+      "geometry_type": "Multi Point",
+      "feature_count": 26
+    },
+    {
+      "name": "市",
+      "file": "市.geojson",
+      "geometry_type": "Multi Polygon",
+      "feature_count": 3
+    },
+    {
+      "name": "里坊",
+      "file": "里坊.geojson",
+      "geometry_type": "Multi Polygon",
+      "feature_count": 109
+    },
+    {
+      "name": "太微城_内城",
+      "file": "太微城_内城.geojson",
+      "geometry_type": "Multi Polygon",
+      "feature_count": 5
+    },
+    {
+      "name": "外郭城墙",
+      "file": "外郭城墙.geojson",
+      "geometry_type": "Multi Line String",
+      "feature_count": 2
+    },
+    {
+      "name": "紫薇城",
+      "file": "紫薇城.geojson",
+      "geometry_type": "Multi Polygon",
+      "feature_count": 6
+    },
+    {
+      "name": "上阳宫",
+      "file": "上阳宫.geojson",
+      "geometry_type": "Multi Polygon",
+      "feature_count": 16
+    },
+    {
+      "name": "上阳宫门",
+      "file": "上阳宫门.geojson",
+      "geometry_type": "Multi Point",
+      "feature_count": 7
+    },
+    {
+      "name": "上阳宫城墙",
+      "file": "上阳宫城墙.geojson",
+      "geometry_type": "Multi Line String",
+      "feature_count": 1
+    },
+    {
+      "name": "离宫",
+      "file": "离宫.geojson",
+      "geometry_type": "3D Multi Polygon",
+      "feature_count": 56
+    },
+    {
+      "name": "苑墙",
+      "file": "苑墙.geojson",
+      "geometry_type": "3D Multi Line String",
+      "feature_count": 1
+    },
+    {
+      "name": "苑门",
+      "file": "苑门.geojson",
+      "geometry_type": "3D Point",
+      "feature_count": 12
+    }
+  ]
+}
