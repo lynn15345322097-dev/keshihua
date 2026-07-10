@@ -367,8 +367,17 @@
       transition: fill 180ms ease, stroke 180ms ease, filter 180ms ease;
     }
 
+    .evidence-site .site-area,
+    .evidence-site .site-line {
+      transition: fill 180ms ease, stroke 180ms ease, opacity 180ms ease, filter 180ms ease;
+    }
+
     .evidence-site.active .node,
-    .evidence-site:hover .node {
+    .evidence-site:hover .node,
+    .evidence-site.active .site-area,
+    .evidence-site:hover .site-area,
+    .evidence-site.active .site-line,
+    .evidence-site:hover .site-line {
       fill: rgba(212, 175, 55, 0.3);
       stroke: var(--gold);
       filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.34));
@@ -809,6 +818,46 @@
       filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.55));
     }
 
+    .site-area {
+      fill: rgba(245, 240, 232, 0.035);
+      stroke: rgba(245, 240, 232, 0.68);
+      stroke-width: 1.1;
+    }
+
+    .site-area.grade-a {
+      fill: rgba(0, 229, 255, 0.055);
+      stroke: rgba(0, 229, 255, 0.62);
+    }
+
+    .site-area.grade-b {
+      fill: rgba(212, 175, 55, 0.055);
+      stroke: rgba(212, 175, 55, 0.58);
+      stroke-dasharray: 8 6;
+    }
+
+    .site-area.grade-c {
+      fill: rgba(245, 240, 232, 0.018);
+      stroke: rgba(245, 240, 232, 0.3);
+      stroke-dasharray: 3 7;
+    }
+
+    .site-line {
+      stroke: rgba(0, 229, 255, 0.62);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .site-line.grade-b {
+      stroke: rgba(212, 175, 55, 0.62);
+      stroke-dasharray: 8 6;
+    }
+
+    .control-point {
+      fill: rgba(10, 10, 10, 0.9);
+      stroke: rgba(245, 240, 232, 0.72);
+      stroke-width: 1;
+    }
+
     .mobile-note {
       display: none;
     }
@@ -1034,14 +1083,46 @@
                 <svg viewBox="0 0 900 620" role="img" aria-label="寻址证据地图">
                   <rect width="900" height="620" fill="rgba(255,255,255,0.01)"/>
                   <path class="modern" d="M78 116 L818 104 M82 304 L804 282 M94 500 L790 506 M140 68 L132 552 M444 42 L444 578 M736 84 L718 554"/>
-                  <path class="ancient" d="M160 112 H730 V510 H160 Z"/>
-                  <path class="ancient" d="M255 165 H640 V462 H255 Z"/>
-                  <path class="ancient dash" d="M170 164 H245 V462 H170 Z M650 164 H720 V462 H650 Z"/>
-                  <path class="ancient-soft dot" d="M155 58 H735 V92 H155 Z"/>
+                  <g class="evidence-site interactive" data-key="palace_city">
+                    <rect class="site-area grade-a" x="160" y="112" width="570" height="398"/>
+                    <text class="map-label zh" x="168" y="106">宫城 / 紫微城范围 A</text>
+                    <circle class="control-point" cx="160" cy="112" r="4"/><circle class="control-point" cx="730" cy="112" r="4"/>
+                    <circle class="control-point" cx="160" cy="510" r="4"/><circle class="control-point" cx="730" cy="510" r="4"/>
+                  </g>
+                  <g class="evidence-site interactive" data-key="danei">
+                    <rect class="site-area grade-a" x="255" y="165" width="385" height="297"/>
+                    <text class="map-label zh" x="272" y="156">大内范围 A</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="west_gecheng">
+                    <rect class="site-area grade-b" x="170" y="164" width="75" height="298"/>
+                    <text class="map-label zh" x="176" y="183">西隔城 B</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="east_gecheng">
+                    <rect class="site-area grade-b" x="650" y="164" width="70" height="298"/>
+                    <text class="map-label zh" x="656" y="183">东隔城 B</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="west_jiacheng">
+                    <rect class="site-area grade-b" x="132" y="392" width="58" height="118"/>
+                    <text class="map-label zh" x="92" y="454">西夹城 B</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="east_jiacheng">
+                    <rect class="site-area grade-c" x="715" y="390" width="48" height="120"/>
+                    <text class="map-label zh" x="770" y="454">东夹城 B/C</text>
+                  </g>
+                  <g class="evidence-site interactive" data-key="jiuzhou">
+                    <path class="site-area grade-b" d="M206 220 C250 172 328 178 362 228 C316 258 246 258 206 220"/>
+                    <path class="site-line grade-b" d="M220 238 C252 254 310 254 346 234"/>
+                    <circle class="control-point" cx="246" cy="214" r="3"/><circle class="control-point" cx="302" cy="208" r="3"/>
+                    <text class="map-label zh" x="210" y="204">九洲池 B</text>
+                  </g>
                   <path class="gold-line" d="M444 112 V512"/>
+                  <g class="evidence-site interactive" data-key="yongtai_bulang">
+                    <path class="site-line" d="M444 452 V510"/>
+                    <rect class="site-area grade-a" x="430" y="452" width="28" height="58"/>
+                    <text class="map-label zh" x="462" y="484">永泰门步廊 A</text>
+                  </g>
                   <path class="cyan-line" d="M410 402 H484 V452 H410 Z"/>
                   <path class="cyan-line" d="M414 324 H478 V370 H414 Z"/>
-                  <path class="cyan-line dash" d="M206 220 C250 172 328 178 362 228 C316 258 246 258 206 220"/>
                   <g class="evidence-site interactive" data-key="yingtian" transform="translate(444 510)">
                     <circle class="node cyan" r="8"/>
                     <text class="map-label zh" x="18" y="4">应天门 A</text>
@@ -1058,21 +1139,10 @@
                     <circle class="node cyan" r="7"/>
                     <text class="map-label zh" x="18" y="4">天堂 待补</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="yongtai_bulang" transform="translate(444 452)">
-                    <circle class="node cyan" r="6"/>
-                    <text class="map-label zh" x="18" y="4">永泰门步廊 A</text>
-                  </g>
-                  <g class="evidence-site interactive" data-key="jiuzhou" transform="translate(286 220)">
-                    <circle class="node gold" r="7"/>
-                    <text class="map-label zh" x="-74" y="-14">九洲池 B</text>
-                  </g>
                   <g class="evidence-site interactive" data-key="xuanwu" transform="translate(444 112)">
                     <circle class="node" r="7"/>
                     <text class="map-label zh" x="18" y="4">玄武门 B</text>
                   </g>
-                  <text class="map-label zh" x="166" y="106">考古确认：可直接入图</text>
-                  <text class="map-label zh" x="658" y="158">报告依据：需要配准</text>
-                  <text class="map-label zh" x="558" y="82">文献线索：辅助定位</text>
                 </svg>
               </div>
             </div>
@@ -1084,6 +1154,9 @@
                   <div class="toggle-row"><span>线</span><span class="state">轴线 / 墙线 / 水渠</span></div>
                   <div class="toggle-row"><span>面</span><span class="state">宫城 / 大内 / 九洲池</span></div>
                   <div class="tag-row"><span class="tag cyan">A 发掘确认</span><span class="tag gold">B 待配准</span><span class="tag">C 文献推定</span></div>
+                  <div class="stat-row"><span>考古确认</span><span>可直接入图</span></div>
+                  <div class="stat-row"><span>报告依据</span><span>需要配准</span></div>
+                  <div class="stat-row"><span>文献线索</span><span>辅助定位</span></div>
                 </div>
               </div>
               <div class="panel">
@@ -1139,7 +1212,7 @@
                 <div class="panel-body">
                   <div class="node-card">
                     <h3>当前人物：武则天</h3>
-                    <p>武则天不是唯一叙事对象，而是第一条示范路径。后续可切换薛怀义、张柬之、唐中宗、唐玄宗等人物。</p>
+                    <p>以武则天为第一条示范路径，把登基、营建、灾毁、宫苑事件和权力转折串回具体遗址点位。薛怀义、张柬之、唐中宗、唐玄宗可作为后续分线。</p>
                     <div class="tag-row"><span class="tag gold">武则天</span><span class="tag">薛怀义</span><span class="tag">张柬之</span><span class="tag">唐中宗</span><span class="tag">唐玄宗</span></div>
                   </div>
                 </div>
@@ -1148,11 +1221,11 @@
                 <div class="panel-header"><span>事件时间线</span><span>空间顺序</span></div>
                 <div class="panel-body">
                   <div class="timeline">
-                    <div class="timeline-item"><h4>应天门</h4><p>武则天登基。</p></div>
-                    <div class="timeline-item"><h4>乾元门</h4><p>中轴过渡。</p></div>
-                    <div class="timeline-item"><h4>明堂 / 天堂</h4><p>营建、火焚、重建。</p></div>
-                    <div class="timeline-item"><h4>九洲池</h4><p>薛怀义被杀。</p></div>
-                    <div class="timeline-item"><h4>玄武门</h4><p>神龙政变。</p></div>
+                    <div class="timeline-item"><h4>应天门</h4><p>武则天登基称帝；唐中宗改名，应天门成为名称变迁和礼仪入口。</p></div>
+                    <div class="timeline-item"><h4>乾元门</h4><p>由永泰门、通天门到乾元门，承担从宫城入口进入内廷核心的过渡。</p></div>
+                    <div class="timeline-item"><h4>明堂 / 天堂</h4><p>武则天营建明堂；薛怀义火焚天堂并延烧明堂，形成建筑兴毁事件链。</p></div>
+                    <div class="timeline-item"><h4>九洲池</h4><p>宫苑水域与政治阴影叠合，薛怀义被杀事件可由明堂/天堂转入九洲池。</p></div>
+                    <div class="timeline-item"><h4>玄武门</h4><p>张柬之等发动神龙政变，北门成为权力转折和武则天退位的叙事终点。</p></div>
                   </div>
                 </div>
               </div>
