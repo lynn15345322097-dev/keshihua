@@ -236,6 +236,29 @@
       background: rgba(212, 175, 55, 0.12);
     }
 
+    .layer-filter-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .layer-filter {
+      min-height: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      transition: color 180ms ease, border-color 180ms ease, background 180ms ease, opacity 180ms ease;
+    }
+
+    .layer-filter.active {
+      color: var(--text);
+      border-color: rgba(212, 175, 55, 0.56);
+      background: rgba(212, 175, 55, 0.12);
+    }
+
     .main {
       min-width: 0;
       padding: 24px;
@@ -381,6 +404,17 @@
       fill: rgba(212, 175, 55, 0.3);
       stroke: var(--gold);
       filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.34));
+    }
+
+    .evidence-map.hide-area [data-layer="area"],
+    .evidence-map.hide-line [data-layer="line"],
+    .evidence-map.hide-point [data-layer="point"] {
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .evidence-map [data-layer] {
+      transition: opacity 220ms ease, filter 220ms ease;
     }
 
     .draw-line {
@@ -615,6 +649,37 @@
       color: var(--muted);
       font-size: 12px;
       padding: 5px 7px;
+    }
+
+    .relation-list {
+      display: grid;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .relation-row {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 42px;
+      padding: 8px 10px;
+      background: rgba(10, 10, 10, 0.82);
+      color: var(--muted);
+      font-size: 12px;
+      cursor: default;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .relation-row:hover {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--text);
+    }
+
+    .relation-row span:first-child {
+      color: var(--text);
+      font-size: 13px;
     }
 
     .tag.gold {
@@ -1057,6 +1122,19 @@
                 </div>
               </div>
               <div class="panel">
+                <div class="panel-header"><span>古今对应</span><span>现代锚点</span></div>
+                <div class="panel-body">
+                  <div class="relation-list">
+                    <div class="relation-row" data-relation-key="yingtian"><span>应天门</span><span>应天门遗址 / 定鼎大道一带</span></div>
+                    <div class="relation-row" data-relation-key="mingtang"><span>明堂</span><span>明堂天堂景区核心展示区</span></div>
+                    <div class="relation-row" data-relation-key="tiantang"><span>天堂</span><span>明堂天堂景区高层复原建筑</span></div>
+                    <div class="relation-row" data-relation-key="jiuzhou"><span>九洲池</span><span>九洲池遗址公园 / 宫苑水系</span></div>
+                    <div class="relation-row" data-relation-key="qianyuan"><span>乾元门</span><span>应天门以北中轴线方向</span></div>
+                    <div class="relation-row" data-relation-key="xuanwu"><span>玄武门</span><span>玄武门大街以南中轴线方向</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel">
                 <div class="panel-header"><span>叠合控制</span><span>古今透明度</span></div>
                 <div class="panel-body">
                   <div class="range-control">
@@ -1080,66 +1158,66 @@
               <div class="panel-header"><span>寻址</span><span>证据如何定位遗址</span></div>
               <div class="map-wrap">
                 <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-                <svg viewBox="0 0 900 620" role="img" aria-label="寻址证据地图">
+                <svg class="evidence-map" id="evidenceMap" viewBox="0 0 900 620" role="img" aria-label="寻址证据地图">
                   <rect width="900" height="620" fill="rgba(255,255,255,0.01)"/>
                   <path class="modern" d="M78 116 L818 104 M82 304 L804 282 M94 500 L790 506 M140 68 L132 552 M444 42 L444 578 M736 84 L718 554"/>
-                  <g class="evidence-site interactive" data-key="palace_city">
+                  <g class="evidence-site interactive" data-layer="area" data-key="palace_city">
                     <rect class="site-area grade-a" x="160" y="112" width="570" height="398"/>
                     <text class="map-label zh" x="168" y="106">宫城 / 紫微城范围 A</text>
                     <circle class="control-point" cx="160" cy="112" r="4"/><circle class="control-point" cx="730" cy="112" r="4"/>
                     <circle class="control-point" cx="160" cy="510" r="4"/><circle class="control-point" cx="730" cy="510" r="4"/>
                   </g>
-                  <g class="evidence-site interactive" data-key="danei">
+                  <g class="evidence-site interactive" data-layer="area" data-key="danei">
                     <rect class="site-area grade-a" x="255" y="165" width="385" height="297"/>
                     <text class="map-label zh" x="272" y="156">大内范围 A</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="west_gecheng">
+                  <g class="evidence-site interactive" data-layer="area" data-key="west_gecheng">
                     <rect class="site-area grade-b" x="170" y="164" width="75" height="298"/>
                     <text class="map-label zh" x="176" y="183">西隔城 B</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="east_gecheng">
+                  <g class="evidence-site interactive" data-layer="area" data-key="east_gecheng">
                     <rect class="site-area grade-b" x="650" y="164" width="70" height="298"/>
                     <text class="map-label zh" x="656" y="183">东隔城 B</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="west_jiacheng">
+                  <g class="evidence-site interactive" data-layer="area" data-key="west_jiacheng">
                     <rect class="site-area grade-b" x="132" y="392" width="58" height="118"/>
                     <text class="map-label zh" x="92" y="454">西夹城 B</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="east_jiacheng">
+                  <g class="evidence-site interactive" data-layer="area" data-key="east_jiacheng">
                     <rect class="site-area grade-c" x="715" y="390" width="48" height="120"/>
                     <text class="map-label zh" x="770" y="454">东夹城 B/C</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="jiuzhou">
+                  <g class="evidence-site interactive" data-layer="area" data-key="jiuzhou">
                     <path class="site-area grade-b" d="M206 220 C250 172 328 178 362 228 C316 258 246 258 206 220"/>
                     <path class="site-line grade-b" d="M220 238 C252 254 310 254 346 234"/>
                     <circle class="control-point" cx="246" cy="214" r="3"/><circle class="control-point" cx="302" cy="208" r="3"/>
                     <text class="map-label zh" x="210" y="204">九洲池 B</text>
                   </g>
-                  <path class="gold-line" d="M444 112 V512"/>
-                  <g class="evidence-site interactive" data-key="yongtai_bulang">
+                  <path class="gold-line" data-layer="line" d="M444 112 V512"/>
+                  <g class="evidence-site interactive" data-layer="line" data-key="yongtai_bulang">
                     <path class="site-line" d="M444 452 V510"/>
                     <rect class="site-area grade-a" x="430" y="452" width="28" height="58"/>
                     <text class="map-label zh" x="462" y="484">永泰门步廊 A</text>
                   </g>
-                  <path class="cyan-line" d="M410 402 H484 V452 H410 Z"/>
-                  <path class="cyan-line" d="M414 324 H478 V370 H414 Z"/>
-                  <g class="evidence-site interactive" data-key="yingtian" transform="translate(444 510)">
+                  <path class="cyan-line" data-layer="area" d="M410 402 H484 V452 H410 Z"/>
+                  <path class="cyan-line" data-layer="area" d="M414 324 H478 V370 H414 Z"/>
+                  <g class="evidence-site interactive" data-layer="point" data-key="yingtian" transform="translate(444 510)">
                     <circle class="node cyan" r="8"/>
                     <text class="map-label zh" x="18" y="4">应天门 A</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="qianyuan" transform="translate(444 426)">
+                  <g class="evidence-site interactive" data-layer="point" data-key="qianyuan" transform="translate(444 426)">
                     <circle class="node cyan" r="7"/>
                     <text class="map-label zh" x="18" y="4">乾元门 A</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="mingtang" transform="translate(444 346)">
+                  <g class="evidence-site interactive" data-layer="point" data-key="mingtang" transform="translate(444 346)">
                     <circle class="node cyan" r="7"/>
                     <text class="map-label zh" x="18" y="4">明堂 A</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="tiantang" transform="translate(444 278)">
+                  <g class="evidence-site interactive" data-layer="point" data-key="tiantang" transform="translate(444 278)">
                     <circle class="node cyan" r="7"/>
                     <text class="map-label zh" x="18" y="4">天堂 待补</text>
                   </g>
-                  <g class="evidence-site interactive" data-key="xuanwu" transform="translate(444 112)">
+                  <g class="evidence-site interactive" data-layer="point" data-key="xuanwu" transform="translate(444 112)">
                     <circle class="node" r="7"/>
                     <text class="map-label zh" x="18" y="4">玄武门 B</text>
                   </g>
@@ -1150,9 +1228,11 @@
               <div class="panel">
                 <div class="panel-header"><span>阅读方式</span><span>点 / 线 / 面</span></div>
                 <div class="panel-body">
-                  <div class="toggle-row"><span>点</span><span class="state">遗址</span></div>
-                  <div class="toggle-row"><span>线</span><span class="state">轴线 / 墙线 / 水渠</span></div>
-                  <div class="toggle-row"><span>面</span><span class="state">宫城 / 大内 / 九洲池</span></div>
+                  <div class="layer-filter-row" aria-label="图层控制">
+                    <button class="layer-filter active" type="button" data-layer-filter="area" aria-pressed="true">面</button>
+                    <button class="layer-filter active" type="button" data-layer-filter="line" aria-pressed="true">线</button>
+                    <button class="layer-filter active" type="button" data-layer-filter="point" aria-pressed="true">点</button>
+                  </div>
                   <div class="tag-row"><span class="tag cyan">A 发掘确认</span><span class="tag gold">B 待配准</span><span class="tag">C 文献推定</span></div>
                   <div class="stat-row"><span>考古确认</span><span>可直接入图</span></div>
                   <div class="stat-row"><span>报告依据</span><span>需要配准</span></div>
@@ -1257,6 +1337,9 @@
     const revealState = document.querySelector("#revealState");
     const siteGroups = Array.from(document.querySelectorAll(".site-group"));
     const evidenceSites = Array.from(document.querySelectorAll(".evidence-site"));
+    const evidenceMap = document.querySelector("#evidenceMap");
+    const layerFilterButtons = Array.from(document.querySelectorAll(".layer-filter"));
+    const relationRows = Array.from(document.querySelectorAll(".relation-row"));
     const heritageRoutePath = document.querySelector("#heritageRoutePath");
     const evidenceCardStatus = document.querySelector("#evidenceCardStatus");
     const evidenceCardTitle = document.querySelector("#evidenceCardTitle");
@@ -1437,6 +1520,23 @@
       evidenceSites.forEach((group) => group.classList.toggle("active", group.dataset.key === key));
     }
 
+    function updateEvidenceLayerVisibility() {
+      if (!evidenceMap) return;
+      const enabled = Object.fromEntries(layerFilterButtons.map((button) => [
+        button.dataset.layerFilter,
+        button.classList.contains("active")
+      ]));
+      evidenceMap.classList.toggle("hide-area", !enabled.area);
+      evidenceMap.classList.toggle("hide-line", !enabled.line);
+      evidenceMap.classList.toggle("hide-point", !enabled.point);
+    }
+
+    function highlightOverviewSite(key, active) {
+      siteGroups.forEach((group) => {
+        group.classList.toggle("active", active && group.dataset.key === key);
+      });
+    }
+
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
         const target = button.dataset.view;
@@ -1453,6 +1553,20 @@
       group.addEventListener("click", () => updateEvidenceCard(key));
     });
 
+    layerFilterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        button.classList.toggle("active");
+        button.setAttribute("aria-pressed", button.classList.contains("active") ? "true" : "false");
+        updateEvidenceLayerVisibility();
+      });
+    });
+
+    relationRows.forEach((row) => {
+      const key = row.dataset.relationKey;
+      row.addEventListener("mouseenter", () => highlightOverviewSite(key, true));
+      row.addEventListener("mouseleave", () => highlightOverviewSite(key, false));
+    });
+
     revealSlider?.addEventListener("input", (event) => updateReveal(event.target.value));
     modelToggle?.addEventListener("click", toggleModel);
     window.addEventListener("resize", () => {
@@ -1461,6 +1575,7 @@
 
     applyRealSitePositions();
     updateEvidenceCard("yingtian");
+    updateEvidenceLayerVisibility();
     setDrawLengths(document);
     updateReveal(revealSlider?.value || 58);
     window.addEventListener("load", () => {
